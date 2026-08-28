@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# Dataset
+data/
+dataset/
+patient_based_classified_images/
+patient_based_classified_images.zip
+
+# Model weights
+*.pth
+*.pt
+*.ckpt
+
+# IDE
+.vscode/
+.idea/
+
+# Environment variables
+.env

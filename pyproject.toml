@@ -1,0 +1,20 @@
+[project]
+name = "ulcerative-colitis-endoscopic-mes-severity"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "BlueSkyExplorer", email = "lammanho3648marco@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "torch>=2.13.0",
+    "torchvision>=0.28.0",
+]
+
+[project.scripts]
+ulcerative-colitis-endoscopic-mes-severity = "ulcerative_colitis_endoscopic_mes_severity:main"
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"
