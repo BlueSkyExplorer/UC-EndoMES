@@ -14,17 +14,29 @@ DATA_ROOT = Path(
 
 def collect_samples(root):
         samples = []  # (image_path, label, patient_id)
+        print(f"[START] root = {root.resolve()}")
         for patient_dir in sorted(root.iterdir()):
+            print(f"[CHECK PATIENT] {patient_dir}")
             if not patient_dir.is_dir():
+                print("  -> skip: not a directory")
                 continue
             patient_id = patient_dir.name
+            print(f"[PATIENT] {patient_id}")
             for mayo_dir in sorted(patient_dir.iterdir()):
+                print(f"  [CHECK MAYO] {mayo_dir.name}")
                 if not mayo_dir.is_dir():
+                    print("    -> skip: not a directory")
+                    continue
+                if not mayo_dir.name.startswith("Mayo "):
+                    print("    -> skip: not Mayo folder")
                     continue
                 label = int(mayo_dir.name.split()[-1])  # "Mayo 2" -> 2
+                print(f"    [MAYO] {mayo_dir.name}, label = {label}")
                 for img_path in mayo_dir.iterdir():
                     if img_path.suffix.lower() in {".bmp", ".png", ".jpg", ".jpeg"}:
                         samples.append((str(img_path), label, patient_id))
+                        print(f"      [IMAGE] {img_path.name}")
+        print(f"[DONE] total samples = {len(samples)}")
         return samples
 
 class LimucDataset(Dataset):
@@ -56,8 +68,17 @@ def main():
     train_ids = set(patient_ids[:split_idx])
     val_ids = set(patient_ids[split_idx:])
 
-    train_samples = [(p, 1) for p, l, pid in samples if pid in train_ids]
-    val_samples = [(p, 1) for p, l, pid in samples if pid in val_ids]
+    train_samples = [
+        (p, l)
+        for p, l, pid in samples
+        if pid in train_ids
+    ]
+
+    val_samples = [
+        (p, l)
+        for p, l, pid in samples
+        if pid in val_ids
+    ]
 
     transform = transforms.Compose([
         transforms.Resize((224,224)),
